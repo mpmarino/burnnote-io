@@ -165,3 +165,12 @@ function burnnote_preload_lock_icon() {
         echo '<link rel="preload" as="image" href="https://burnnote.io/wp-content/uploads/2025/06/burnnote-lock-icon-blue.png" type="image/png" fetchpriority="high">' . "\n";
     }
 }
+add_action('wp_head', 'burnnote_preload_lock_icon');
+function burnnote_preload_lock_icon() {
+    if (is_page() && has_shortcode(get_post()->post_content, 'burnnote_form')) {
+        $attachment_id = 61; // your uploaded icon
+        $img_url = wp_get_attachment_url($attachment_id);
+        if ($img_url) {
+            echo '<link rel="preload" as="image" href="' . esc_url($img_url) . '" type="image/png" fetchpriority="high">' . "\n";
+        }
+    }
