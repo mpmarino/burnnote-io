@@ -6,6 +6,45 @@ Version: 1.3.8
 Author: Your Name
 */
 
+// Encryption functions
+function burnnote_encrypt_message($message) {
+    if (!defined('BURNNOTE_SECRET_KEY')) {
+        wp_die('BurnNote encryption key is not configured.');
+    }
+
+    $key = hash('sha256', BURNNOTE_SECRET_KEY, true);
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+
+    $encrypted = openssl_encrypt($message, 'aes-256-cbc', $key, 0, $iv);
+    if ($encrypted === false) {
+        wp_die('Encryption failed');
+    }
+
+    // Combine IV and encrypted data
+    return base64_encode($iv . $encrypted);
+}
+
+function burnnote_decrypt_message($encrypted_data) {
+    if (!defined('BURNNOTE_SECRET_KEY')) {
+        wp_die('BurnNote encryption key is not configured.');
+    }
+
+    $key = hash('sha256', BURNNOTE_SECRET_KEY, true);
+    $data = base64_decode($encrypted_data);
+
+    // Extract IV and encrypted message
+    $iv_length = openssl_cipher_iv_length('aes-256-cbc');
+    $iv = substr($data, 0, $iv_length);
+    $encrypted = substr($data, $iv_length);
+
+    $decrypted = openssl_decrypt($encrypted, 'aes-256-cbc', $key, 0, $iv);
+    if ($decrypted === false) {
+        wp_die('Decryption failed');
+    }
+
+    return $decrypted;
+}
+
 add_shortcode('burnnote_form', 'burnnote_form_shortcode');
 add_action('init', 'burnnote_view_note');
 
@@ -20,9 +59,12 @@ function burnnote_form_shortcode() {
         $password = !empty($_POST['new_burnnote_password']) ? sanitize_text_field($_POST['new_burnnote_password']) : null;
         $password_hash = $password ? password_hash($password, PASSWORD_DEFAULT) : null;
 
+        // Encrypt the message before storing
+        $encrypted_message = burnnote_encrypt_message($message);
+
         $wpdb->insert($table, [
             'token' => $token,
-            'message' => $message,
+            'message' => $encrypted_message,
             'password' => $password_hash,
             'viewed' => 0,
             'expires_at' => null
@@ -85,8 +127,16 @@ function burnnote_view_note() {
         }
     }
 
+    // Mark as viewed
     $wpdb->update($table, ['viewed' => 1], ['token' => $token]);
-    $message = esc_html($row->message);
+
+    // If no expiration time is set, delete the note after viewing
+    if (empty($row->expires_at)) {
+        $wpdb->delete($table, ['token' => $token]);
+    }
+
+    // Decrypt the message before displaying
+    $message = esc_html(burnnote_decrypt_message($row->message));
     include plugin_dir_path(__FILE__) . 'templates/message-view.php';
     exit;
 }
