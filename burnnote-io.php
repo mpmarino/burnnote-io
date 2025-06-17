@@ -2,7 +2,7 @@
 /*
 Plugin Name: BurnNote.io
 Description: Create private, self-destructing notes with one-time-view links.
-Version: 1.3.8
+Version: 1.3.9
 Author: Your Name
 */
 
@@ -12,6 +12,33 @@ add_action('init', 'burnnote_view_note');
 function burnnote_form_shortcode() {
     ob_start();
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['burnnote_message'])) {
+        // Cloudflare Turnstile validation
+        if (!empty($_POST['cf-turnstile-response'])) {
+            $turnstile_response = sanitize_text_field($_POST['cf-turnstile-response']);
+
+            $verify_response = wp_remote_post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+                'body' => [
+                    'secret'   => defined('CF_TURNSTILE_SECRET_KEY') ? CF_TURNSTILE_SECRET_KEY : '',
+                    'response' => $turnstile_response,
+                    'remoteip' => $_SERVER['REMOTE_ADDR'],
+                ],
+            ]);
+
+            if (is_wp_error($verify_response)) {
+                return '<div class="burnnote-error">Verification request failed. Please try again.</div>';
+            }
+
+            $body = json_decode(wp_remote_retrieve_body($verify_response), true);
+
+            if (!isset($body['success']) || !$body['success']) {
+                $error_codes = isset($body['error-codes']) ? implode(', ', $body['error-codes']) : 'Unknown error';
+                return '<div class="burnnote-error">Security check failed: ' . esc_html($error_codes) . '</div>';
+            }
+        } else {
+            return '<div class="burnnote-error">Turnstile token missing. Please refresh and try again.</div>';
+        }
+
+        // End
         global $wpdb;
         $table = $wpdb->prefix . 'burnnotes';
         $message = sanitize_textarea_field($_POST['burnnote_message']);
@@ -85,7 +112,9 @@ function burnnote_view_note() {
         }
     }
 
-    $wpdb->update($table, ['viewed' => 1], ['token' => $token]);
+    // Delete after viewing
+    $wpdb->delete($table, ['token' => $token]);
+
     $message = esc_html($row->message);
     include plugin_dir_path(__FILE__) . 'templates/message-view.php';
     exit;
@@ -114,5 +143,25 @@ add_action('wp_enqueue_scripts', 'burnnote_enqueue_styles');
 function burnnote_enqueue_styles() {
     if (!is_admin()) {
         wp_enqueue_style('burnnote-style', plugins_url('burnnote-io.css', __FILE__));
+    }
+}
+
+add_action('wp_enqueue_scripts', 'burnnote_enqueue_turnstile');
+function burnnote_enqueue_turnstile() {
+    if (has_shortcode(get_post()->post_content, 'burnnote_form')) {
+        wp_enqueue_script(
+            'cf-turnstile',
+            'https://challenges.cloudflare.com/turnstile/v0/api.js',
+            [],
+            null,
+            true
+        );
+    }
+}
+
+add_action('wp_head', 'burnnote_preload_lock_icon');
+function burnnote_preload_lock_icon() {
+    if (is_page() && has_shortcode(get_post()->post_content, 'burnnote_form')) {
+        echo '<link rel="preload" as="image" href="https://burnnote.io/wp-content/uploads/2025/06/burnnote-lock-icon-blue.png" type="image/png" fetchpriority="high">' . "\n";
     }
 }
