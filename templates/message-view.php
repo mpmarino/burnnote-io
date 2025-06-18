@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>BurnNote | Your Message</title>
-  <?php wp_head(); ?>
+    <meta charset="UTF-8">
+    <title>BurnNote | Your Message</title>
+	<?php wp_head(); ?>
 </head>
 <body>
   <div class="burnnote-container">
-    <h2>Your Message:</h2>
-    <p><?php echo $message; ?></p>
-    <p class="burnnote-subtext"><em>This note has now been deleted.</em></p>
-    <a href="<?php echo esc_url(site_url()); ?>" style="display:inline-block;margin-top:1rem;color:#4FBFA2;text-decoration:underline;">← Make a new note</a>
+    <div class="burnnote-header">
+      <div class="burnnote-icon" role="img" aria-label="Secure lock icon"></div>
+      <h2>Your Message</h2>
+      <p class="burnnote-subtext"><em>This note will now been burned.</em></p>
+    </div>
+
+    <div class="burnnote-message-body">
+	<p>
+		<?php echo nl2br(esc_html($message)); ?>
+	</p>
+    </div>
+
+    <div class="burnnote-newnote-link">
+      <a href="<?php echo esc_url(site_url()); ?>">← Make a new note</a>
+    </div>
   </div>
   <?php wp_footer(); ?>
 </body>
