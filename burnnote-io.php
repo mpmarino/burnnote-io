@@ -111,11 +111,17 @@ function burnnote_view_note() {
             exit;
         }
     }
-
+    
     // Delete after viewing
-    $wpdb->delete($table, ['token' => $token]);
+    $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE token = %s", $token));
 
-    $message = esc_html($row->message);
+    // If no expiration time is set and note is viewed, delete it
+    if (empty($row->expires_at)) {
+        $wpdb->delete($table, ['token' => $token]);
+    }
+
+    // Decrypt the message before displaying
+    $message = esc_html(burnnote_decrypt_message($row->message));
     include plugin_dir_path(__FILE__) . 'templates/message-view.php';
     exit;
 }
