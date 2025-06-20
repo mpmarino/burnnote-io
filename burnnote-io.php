@@ -250,17 +250,6 @@ function burnnote_enqueue_styles() {
     }
 }
 
-add_action('wp_enqueue_scripts', 'burnnote_enqueue_scripts');
-function burnnote_enqueue_scripts() {
-    if (!is_admin()) {
-        wp_enqueue_script('burnnote-script', plugins_url('burnnote-io.js', __FILE__), array('jquery'), '1.0.0', true);
-        wp_localize_script('burnnote-script', 'burnnote_ajax', array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('burnnote_nonce')
-        ));
-    }
-}
-
 add_action('wp_enqueue_scripts', 'burnnote_enqueue_turnstile');
 function burnnote_enqueue_turnstile() {
     $post = get_post();
