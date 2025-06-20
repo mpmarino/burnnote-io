@@ -6,10 +6,16 @@
     <?php wp_head(); ?>
 </head>
 <body>
-    <div class="burnnote-header">
+    <div class="burnnote-container">
+      <div class="burnnote-header">
+        <div class="burnnote-icon" role="img" aria-label="Secure lock icon"></div>
         <h2>Note Already Viewed</h2>
         <p class="burnnote-subtext">This note has already been viewed and is no longer available.</p>
-        <a href="<?php echo site_url(); ?>" style="display:inline-block;margin-top:1rem;color:#4FBFA2;text-decoration:underline;">← Create a new note</a>
+      </div>
+      
+      <div class="burnnote-newnote-link">
+        <a href="<?php echo site_url(); ?>">← Create a new note</a>
+      </div>
     </div>
     <?php wp_footer(); ?>
 </body>

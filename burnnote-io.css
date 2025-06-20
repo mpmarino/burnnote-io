@@ -1,13 +1,27 @@
 /* ---------------------------------------------------
 Font Import
 --------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+/* ---------------------------------------------------
+Global Variables
+--------------------------------------------------- */
+:root {
+  --burnnote-navy: #0B2948;
+  --burnnote-teal: #4FBFA2;
+  --burnnote-light-gray: #F9FAFB;
+  --burnnote-white: #ffffff;
+  --burnnote-text-dark: #1f2937;
+  --burnnote-border: #e5e7eb;
+  --burnnote-shadow: rgba(0, 0, 0, 0.06);
+  --burnnote-shadow-hover: rgba(0, 0, 0, 0.1);
+}
 
 /* ---------------------------------------------------
 Hero Section Background
 --------------------------------------------------- */
 .burnnote-hero {
-  background-color: #E6F6F3;
+  background-color: var(--burnnote-light-gray);
   padding: 4rem 1rem;
 }
 
@@ -16,13 +30,14 @@ Container Styles (Shared)
 --------------------------------------------------- */
 .burnnote-container {
   font-family: 'IBM Plex Sans', sans-serif;
-  background-color: #4FBFA2;
+  background-color: var(--burnnote-white);
+  background-color: #4FBFA2;;
   padding: 2.5rem;
   border-radius: 16px;
   max-width: 640px;
   margin: 0 auto;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.06);
-  border: none;
+  box-shadow: 0 12px 25px var(--burnnote-shadow);
+  border: 1px solid var(--burnnote-border);
   position: relative;
 }
 
@@ -31,6 +46,13 @@ Container Styles (Shared)
   font-weight: 500;
   margin-top: 1.5rem;
   text-align: center;
+  color: var(--burnnote-navy);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.burnnote-container a:hover {
+  color: var(--burnnote-teal);
 }
 
 /* ---------------------------------------------------
@@ -38,7 +60,7 @@ Header Section with Icon
 --------------------------------------------------- */
 .burnnote-header {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .burnnote-header .burnnote-icon {
@@ -53,21 +75,21 @@ Header Section with Icon
 .burnnote-header h2 {
   font-weight: 700;
   font-size: 1.75rem;
-  color: #ffffff;
+  color: var(--burnnote-navy);
   margin-bottom: 0.75rem;
   text-align: center;
 }
 
 .burnnote-header .burnnote-subtext {
-  color: #fff;
+  color: var(--burnnote-text-dark);
   font-size: 1rem;
   font-weight: 400;
   margin-top: -0.5rem;
   margin-bottom: 1.5rem;
   text-align: center;
-  opacity: 0.95;
+  opacity: 0.8;
+  line-height: 1.5;
 }
-
 
 /* ---------------------------------------------------
 Textarea (Message Input)
@@ -76,17 +98,18 @@ Textarea (Message Input)
 .burnnote-password-field {
   width: 100%;
   padding: 1rem;
-  border: 1px solid #d0d7df;
+  border: 1px solid var(--burnnote-border);
   border-radius: 10px;
   resize: vertical;
   font-size: 1rem;
-  background: #ffffff;
-  color: #0B2948;
+  background: var(--burnnote-white);
+  color: var(--burnnote-text-dark);
   line-height: 1.4;
   font-family: inherit;
   box-sizing: border-box;
   margin-bottom: 1rem;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .burnnote-container textarea::placeholder {
@@ -96,7 +119,7 @@ Textarea (Message Input)
 .burnnote-container textarea:focus,
 .burnnote-password-field:focus {
   outline: none;
-  border-color: #4FBFA2;
+  border-color: var(--burnnote-teal);
   box-shadow: 0 0 0 3px rgba(79, 191, 162, 0.25);
 }
 
@@ -105,40 +128,96 @@ Submit Button (both pages)
 --------------------------------------------------- */
 .burnnote-submit-btn,
 .burnnote-container button[type="submit"] {
-  background-color: #0B2948;
-  color: white;
+  background-color: var(--burnnote-navy);
+  color: var(--burnnote-white);
   font-weight: 600;
   border: none;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
   letter-spacing: 0.3px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  font-family: inherit;
 }
 
 .burnnote-submit-btn:hover,
 .burnnote-container button[type="submit"]:hover {
   background-color: #1B3C63;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------------------------------------------------
+Reveal Button
+--------------------------------------------------- */
+.burnnote-reveal-section {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.burnnote-reveal-btn {
+  background-color: var(--burnnote-teal);
+  color: var(--burnnote-white);
+  font-weight: 600;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 12px rgba(79, 191, 162, 0.3);
+  font-family: inherit;
+  min-width: 200px;
+}
+
+.burnnote-reveal-btn:hover {
+  background-color: #3daa8f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(79, 191, 162, 0.4);
+}
+
+.burnnote-reveal-btn:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--burnnote-white);
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* ---------------------------------------------------
 Copy Link Styles
 --------------------------------------------------- */
 .burnnote-link-box {
-  background: #e6f6f3;
-  border-left: 4px solid #4FBFA2;
-  padding: 1rem;
-  border-radius: 6px;
+  background: var(--burnnote-light-gray);
+  border-left: 4px solid var(--burnnote-teal);
+  padding: 1.5rem;
+  border-radius: 8px;
   margin-top: 1.5rem;
 }
 
 .burnnote-link-box label {
   display: block;
   font-weight: 600;
-  color: #0B2948;
-  margin-bottom: 0.5rem;
+  color: var(--burnnote-navy);
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
 }
 
 .burnnote-link-row {
@@ -149,30 +228,136 @@ Copy Link Styles
 
 #burnnote-generated-link {
   flex: 1;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 5px;
-  background: #fff;
-  color: #0B2948;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  border: 1px solid var(--burnnote-border);
+  border-radius: 6px;
+  background: var(--burnnote-white);
+  color: var(--burnnote-text-dark);
   font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+#burnnote-generated-link:focus {
+  outline: none;
+  border-color: var(--burnnote-teal);
+  box-shadow: 0 0 0 3px rgba(79, 191, 162, 0.25);
 }
 
 #burnnote-copy-btn {
-  background-color: #0B2948;
-  color: #fff;
+  background-color: var(--burnnote-navy);
+  color: var(--burnnote-white);
   border: none;
   font-weight: 600;
   padding: 0 1rem;
   font-size: 0.9rem;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
   user-select: none;
+  font-family: inherit;
+  min-width: 80px;
 }
 
 #burnnote-copy-btn:hover {
   background-color: #1B3C63;
+  transform: translateY(-1px);
+}
+
+#burnnote-open-btn {
+  background-color: var(--burnnote-teal);
+  color: var(--burnnote-white);
+  border: none;
+  font-weight: 600;
+  padding: 0 0.75rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  font-family: inherit;
+  min-width: 50px;
+}
+
+#burnnote-open-btn:hover {
+  background-color: #3daa8f;
+  transform: translateY(-1px);
+}
+
+/* ---------------------------------------------------
+Message Display
+--------------------------------------------------- */
+.burnnote-message-body {
+  background: var(--burnnote-light-gray);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-left: 4px solid var(--burnnote-teal);
+}
+
+.burnnote-message-body p {
+  font-size: 1.1rem;
+  color: var(--burnnote-text-dark);
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.burnnote-message-text {
+  font-size: 1.25rem;
+  color: var(--burnnote-navy);
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.6;
+  margin: 1rem 0;
+}
+
+/* ---------------------------------------------------
+Link Display
+--------------------------------------------------- */
+.burnnote-newnote-link {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.burnnote-newnote-link a {
+  color: var(--burnnote-navy);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.burnnote-newnote-link a:hover {
+  color: var(--burnnote-teal);
+  background-color: var(--burnnote-light-gray);
+}
+
+/* ---------------------------------------------------
+Error and Success Messages
+--------------------------------------------------- */
+.burnnote-error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-weight: 500;
+  border-left: 4px solid #dc2626;
+}
+
+.burnnote-success {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #16a34a;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-weight: 500;
+  border-left: 4px solid #16a34a;
 }
 
 /* ---------------------------------------------------
@@ -195,7 +380,8 @@ Mobile Responsiveness
 
   .burnnote-container button[type="submit"],
   .burnnote-submit-btn,
-  #burnnote-copy-btn {
+  #burnnote-copy-btn,
+  #burnnote-open-btn {
     width: 100%;
     text-align: center;
   }
@@ -204,34 +390,9 @@ Mobile Responsiveness
     flex-direction: column;
     gap: 0.75rem;
   }
-}
-
-/* ---------------------------------------------------
-Link Display
---------------------------------------------------- */
-.burnnote-newnote-link {
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.burnnote-newnote-link a {
-  color: #ffffff;
-  text-decoration: underline;
-  font-weight: 500;
-}
-
-/* ---------------------------------------------------
-Message
---------------------------------------------------- */
-.burnnote-message-body {
-  margin: 1.5rem 0;
-}
-
-.burnnote-message-text {
-  font-size: 1.25rem;
-  color: #0B2948;
-  font-weight: 500;
-  text-align: center;
-  line-height: 1.6;
-  margin: 1rem 0;
+  
+  .burnnote-reveal-btn {
+    width: 100%;
+    min-width: auto;
+  }
 }

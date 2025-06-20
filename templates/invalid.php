@@ -7,9 +7,15 @@
 </head>
 <body>
     <div class="burnnote-container">
+      <div class="burnnote-header">
+        <div class="burnnote-icon" role="img" aria-label="Secure lock icon"></div>
         <h2>Invalid Link</h2>
         <p class="burnnote-subtext">This link is invalid or has expired.</p>
-        <a href="<?php echo esc_url(site_url()); ?>" style="display:inline-block;margin-top:1rem;color:#4FBFA2;text-decoration:underline;">← Create a new note</a>
+      </div>
+      
+      <div class="burnnote-newnote-link">
+        <a href="<?php echo esc_url(site_url()); ?>">← Create a new note</a>
+      </div>
     </div>
     <?php wp_footer(); ?>
 </body>

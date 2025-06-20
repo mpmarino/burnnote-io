@@ -124,48 +124,104 @@ function burnnote_form_shortcode() {
 }
 
 function burnnote_view_note() {
-    if (!isset($_GET['burnnote_view'])) return;
+    if (!isset($_GET['burnnote_view']) && !isset($_GET['burnnote_reveal'])) return;
+
+    // Start session if not already started
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 
     global $wpdb;
     $table = $wpdb->prefix . 'burnnotes';
-    $token = sanitize_text_field($_GET['burnnote_view']);
-    $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE token = %s", $token));
+    
+    // Handle the reveal flow
+    if (isset($_GET['burnnote_reveal'])) {
+        $token = sanitize_text_field($_GET['burnnote_reveal']);
+        $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE token = %s", $token));
 
-    if (!$row) {
-        include plugin_dir_path(__FILE__) . 'templates/invalid.php';
-        exit;
-    }
-
-    if ($row->viewed) {
-        include plugin_dir_path(__FILE__) . 'templates/already-viewed.php';
-        exit;
-    }
-
-    if (!empty($row->password)) {
-        if (!isset($_POST['burnnote_password'])) {
-            include plugin_dir_path(__FILE__) . 'templates/password-form.php';
+        if (!$row) {
+            include plugin_dir_path(__FILE__) . 'templates/invalid.php';
             exit;
         }
 
-        $submitted_password = sanitize_text_field($_POST['burnnote_password']);
-        if (!password_verify($submitted_password, $row->password)) {
-            include plugin_dir_path(__FILE__) . 'templates/incorrect-password.php';
+        if ($row->viewed) {
+            include plugin_dir_path(__FILE__) . 'templates/already-viewed.php';
             exit;
         }
+
+        if (!empty($row->password)) {
+            // Check if password was already verified in this session
+            $session_key = 'burnnote_verified_' . $token;
+            if (!isset($_SESSION[$session_key])) {
+                if (!isset($_POST['burnnote_password'])) {
+                    include plugin_dir_path(__FILE__) . 'templates/password-form.php';
+                    exit;
+                }
+
+                $submitted_password = sanitize_text_field($_POST['burnnote_password']);
+                if (!password_verify($submitted_password, $row->password)) {
+                    include plugin_dir_path(__FILE__) . 'templates/incorrect-password.php';
+                    exit;
+                }
+                
+                // Mark as verified in session
+                $_SESSION[$session_key] = true;
+            }
+        }
+        
+        // Mark as viewed and delete after displaying
+        $wpdb->update($table, ['viewed' => 1], ['token' => $token]);
+        
+        // If no expiration time is set, delete it
+        if (empty($row->expires_at)) {
+            $wpdb->delete($table, ['token' => $token]);
+        }
+
+        // Decrypt the message before displaying
+        $message = esc_html(burnnote_decrypt_message($row->message));
+        include plugin_dir_path(__FILE__) . 'templates/message-view.php';
+        exit;
     }
     
-    // Delete after viewing
-    $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE token = %s", $token));
+    // Handle the initial view (show reveal prompt)
+    if (isset($_GET['burnnote_view'])) {
+        $token = sanitize_text_field($_GET['burnnote_view']);
+        $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE token = %s", $token));
 
-    // If no expiration time is set and note is viewed, delete it
-    if (empty($row->expires_at)) {
-        $wpdb->delete($table, ['token' => $token]);
+        if (!$row) {
+            include plugin_dir_path(__FILE__) . 'templates/invalid.php';
+            exit;
+        }
+
+        if ($row->viewed) {
+            include plugin_dir_path(__FILE__) . 'templates/already-viewed.php';
+            exit;
+        }
+
+        if (!empty($row->password)) {
+            // Check if password was already verified in this session
+            $session_key = 'burnnote_verified_' . $token;
+            if (!isset($_SESSION[$session_key])) {
+                if (!isset($_POST['burnnote_password'])) {
+                    include plugin_dir_path(__FILE__) . 'templates/password-form.php';
+                    exit;
+                }
+
+                $submitted_password = sanitize_text_field($_POST['burnnote_password']);
+                if (!password_verify($submitted_password, $row->password)) {
+                    include plugin_dir_path(__FILE__) . 'templates/incorrect-password.php';
+                    exit;
+                }
+                
+                // Mark as verified in session
+                $_SESSION[$session_key] = true;
+            }
+        }
+        
+        // Show the reveal prompt
+        include plugin_dir_path(__FILE__) . 'templates/reveal-prompt.php';
+        exit;
     }
-
-    // Decrypt the message before displaying
-    $message = esc_html(burnnote_decrypt_message($row->message));
-    include plugin_dir_path(__FILE__) . 'templates/message-view.php';
-    exit;
 }
 
 register_activation_hook(__FILE__, 'burnnote_create_table');
@@ -194,9 +250,21 @@ function burnnote_enqueue_styles() {
     }
 }
 
+add_action('wp_enqueue_scripts', 'burnnote_enqueue_scripts');
+function burnnote_enqueue_scripts() {
+    if (!is_admin()) {
+        wp_enqueue_script('burnnote-script', plugins_url('burnnote-io.js', __FILE__), array('jquery'), '1.0.0', true);
+        wp_localize_script('burnnote-script', 'burnnote_ajax', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('burnnote_nonce')
+        ));
+    }
+}
+
 add_action('wp_enqueue_scripts', 'burnnote_enqueue_turnstile');
 function burnnote_enqueue_turnstile() {
-    if (has_shortcode(get_post()->post_content, 'burnnote_form')) {
+    $post = get_post();
+    if ($post && has_shortcode($post->post_content, 'burnnote_form')) {
         wp_enqueue_script(
             'cf-turnstile',
             'https://challenges.cloudflare.com/turnstile/v0/api.js',
@@ -209,7 +277,8 @@ function burnnote_enqueue_turnstile() {
 
 add_action('wp_head', 'burnnote_preload_lock_icon');
 function burnnote_preload_lock_icon() {
-    if (is_page() && has_shortcode(get_post()->post_content, 'burnnote_form')) {
+    $post = get_post();
+    if ($post && is_page() && has_shortcode($post->post_content, 'burnnote_form')) {
         $attachment_id = 61; // your uploaded icon
         $img_url = wp_get_attachment_url($attachment_id);
         if ($img_url) {
