@@ -246,7 +246,7 @@ function burnnote_create_table() {
 add_action('wp_enqueue_scripts', 'burnnote_enqueue_styles');
 function burnnote_enqueue_styles() {
     if (!is_admin()) {
-        wp_enqueue_style('burnnote-style', plugins_url('burnnote-io.css', __FILE__));
+        wp_enqueue_style('burnnote-style', plugins_url('burnnote-io.css', __FILE__), array(), '2.0.0');
     }
 }
 
