@@ -1,14 +1,48 @@
 /* ---------------------------------------------------
 Font Import
 --------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+/* ---------------------------------------------------
+Global Variables
+--------------------------------------------------- */
+:root {
+  --burnnote-navy: #0B2948;
+  --burnnote-teal: #4FBFA2;
+  --burnnote-light-gray: #F9FAFB;
+  --burnnote-white: #ffffff;
+  --burnnote-text-dark: #1f2937;
+  --burnnote-border: #e5e7eb;
+  --burnnote-shadow: rgba(0, 0, 0, 0.06);
+  --burnnote-shadow-hover: rgba(0, 0, 0, 0.1);
+  --burnnote-gradient: linear-gradient(135deg, #4FBFA2 0%, #3daa8f 100%);
+  --burnnote-navy-gradient: linear-gradient(135deg, #0B2948 0%, #1B3C63 100%);
+}
+
+/* ---------------------------------------------------
+Body and Global Styles
+--------------------------------------------------- */
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  font-family: 'IBM Plex Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* ---------------------------------------------------
 Hero Section Background
 --------------------------------------------------- */
 .burnnote-hero {
-  background-color: #E6F6F3;
+  background-color: var(--burnnote-light-gray);
   padding: 4rem 1rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ---------------------------------------------------
@@ -16,14 +50,35 @@ Container Styles (Shared)
 --------------------------------------------------- */
 .burnnote-container {
   font-family: 'IBM Plex Sans', sans-serif;
-  background-color: #4FBFA2;
-  padding: 2.5rem;
-  border-radius: 16px;
-  max-width: 640px;
+  
+  padding: 3.5rem 3rem;
+  border-radius: 20px;
+  max-width: 800px !important;
+  width: 800px !important;
   margin: 0 auto;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.06);
-  border: none;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 0.6s ease-out;
+  overflow: hidden;
+  background-color: #4FBFA2;
+}
+
+/* Override any percentage-based constraints */
+.burnnote-container,
+.burnnote-container * {
+  max-width: none !important;
+}
+
+.burnnote-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: var(--burnnote-navy);
 }
 
 .burnnote-container a {
@@ -31,6 +86,15 @@ Container Styles (Shared)
   font-weight: 500;
   margin-top: 1.5rem;
   text-align: center;
+  color: var(--burnnote-navy);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.burnnote-container a:hover {
+  color: var(--burnnote-teal);
+  transform: translateY(-1px);
 }
 
 /* ---------------------------------------------------
@@ -38,36 +102,42 @@ Header Section with Icon
 --------------------------------------------------- */
 .burnnote-header {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
 .burnnote-header .burnnote-icon {
   display: inline-block;
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
   background: url('https://burnnote.io/wp-content/uploads/2025/06/burnnote-lock-icon-blue.png') no-repeat center center;
   background-size: contain;
-  margin: 0 auto 1rem;
+  margin: 0 auto 1.5rem;
+  animation: pulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .burnnote-header h2 {
   font-weight: 700;
-  font-size: 1.75rem;
-  color: #ffffff;
-  margin-bottom: 0.75rem;
+  font-size: 2rem;
+  color: var(--burnnote-navy);
+  margin-bottom: 1rem;
   text-align: center;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
 }
 
 .burnnote-header .burnnote-subtext {
-  color: #fff;
-  font-size: 1rem;
+  color: var(--burnnote-text-dark);
+  font-size: 1.1rem;
   font-weight: 400;
-  margin-top: -0.5rem;
-  margin-bottom: 1.5rem;
+  margin: 0;
   text-align: center;
-  opacity: 0.95;
+  opacity: 0.8;
+  line-height: 1.6;
+  max-width: 400px;
+  margin: 0 auto;
 }
-
 
 /* ---------------------------------------------------
 Textarea (Message Input)
@@ -75,29 +145,33 @@ Textarea (Message Input)
 .burnnote-container textarea,
 .burnnote-password-field {
   width: 100%;
-  padding: 1rem;
-  border: 1px solid #d0d7df;
-  border-radius: 10px;
+  padding: 1.25rem;
+  border: 2px solid var(--burnnote-navy);
+  border-radius: 12px;
   resize: vertical;
   font-size: 1rem;
-  background: #ffffff;
-  color: #0B2948;
-  line-height: 1.4;
+  background: var(--burnnote-white);
+  color: var(--burnnote-text-dark);
+  line-height: 1.5;
   font-family: inherit;
   box-sizing: border-box;
-  margin-bottom: 1rem;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  min-height: 120px;
 }
 
 .burnnote-container textarea::placeholder {
   color: #94a3b8;
+  font-weight: 400;
 }
 
 .burnnote-container textarea:focus,
 .burnnote-password-field:focus {
   outline: none;
-  border-color: #4FBFA2;
-  box-shadow: 0 0 0 3px rgba(79, 191, 162, 0.25);
+  border-color: var(--burnnote-teal);
+  box-shadow: 0 0 0 4px rgba(79, 191, 162, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
 }
 
 /* ---------------------------------------------------
@@ -105,97 +179,347 @@ Submit Button (both pages)
 --------------------------------------------------- */
 .burnnote-submit-btn,
 .burnnote-container button[type="submit"] {
-  background-color: #0B2948;
-  color: white;
+  background: var(--burnnote-navy-gradient);
+  color: var(--burnnote-white);
   font-weight: 600;
   border: none;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 8px;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
   letter-spacing: 0.3px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(11, 41, 72, 0.2);
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.burnnote-submit-btn::before,
+.burnnote-container button[type="submit"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.burnnote-submit-btn:hover::before,
+.burnnote-container button[type="submit"]:hover::before {
+  left: 100%;
 }
 
 .burnnote-submit-btn:hover,
 .burnnote-container button[type="submit"]:hover {
-  background-color: #1B3C63;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(11, 41, 72, 0.3);
+}
+
+/* ---------------------------------------------------
+Reveal Button
+--------------------------------------------------- */
+.burnnote-reveal-section {
+  text-align: center;
+  margin: 3rem 0;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.burnnote-reveal-btn {
+  background: var(--burnnote-gradient);
+  color: var(--burnnote-white);
+  font-weight: 600;
+  border: none;
+  padding: 1.25rem 2.5rem;
+  font-size: 1.2rem;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+  box-shadow: 0 8px 24px rgba(79, 191, 162, 0.3);
+  font-family: inherit;
+  min-width: 220px;
+  position: relative;
+  overflow: hidden;
+}
+
+.burnnote-reveal-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.burnnote-reveal-btn:hover::before {
+  left: 100%;
+}
+
+.burnnote-reveal-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(79, 191, 162, 0.4);
+}
+
+.burnnote-reveal-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--burnnote-white);
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 /* ---------------------------------------------------
 Copy Link Styles
 --------------------------------------------------- */
 .burnnote-link-box {
-  background: #e6f6f3;
-  border-left: 4px solid #4FBFA2;
-  padding: 1rem;
-  border-radius: 6px;
-  margin-top: 1.5rem;
+  background: var(--burnnote-light-gray);
+  border-left: 4px solid var(--burnnote-teal);
+  padding: 2rem;
+  border-radius: 12px;
+  margin-top: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  animation: fadeInUp 0.8s ease-out 0.6s both;
 }
 
 .burnnote-link-box label {
   display: block;
   font-weight: 600;
-  color: #0B2948;
-  margin-bottom: 0.5rem;
+  color: var(--burnnote-navy);
+  margin-bottom: 1rem;
+  font-size: 1rem;
 }
 
 .burnnote-link-row {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
   align-items: stretch;
 }
 
 #burnnote-generated-link {
   flex: 1;
-  padding: 0.5rem;
+  padding: 1rem;
   font-size: 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 5px;
-  background: #fff;
-  color: #0B2948;
+  border: 2px solid var(--burnnote-navy);
+  border-radius: 8px;
+  background: var(--burnnote-white);
+  color: var(--burnnote-text-dark);
   font-family: inherit;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+#burnnote-generated-link:focus {
+  outline: none;
+  border-color: var(--burnnote-teal);
+  box-shadow: 0 0 0 4px rgba(79, 191, 162, 0.15);
 }
 
 #burnnote-copy-btn {
-  background-color: #0B2948;
-  color: #fff;
+  background: var(--burnnote-navy-gradient);
+  color: var(--burnnote-white);
   border: none;
   font-weight: 600;
-  padding: 0 1rem;
-  font-size: 0.9rem;
-  border-radius: 5px;
+  padding: 0 1.5rem;
+  font-size: 0.95rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
   user-select: none;
+  font-family: inherit;
+  min-width: 90px;
 }
 
 #burnnote-copy-btn:hover {
-  background-color: #1B3C63;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(11, 41, 72, 0.2);
+}
+
+#burnnote-open-btn {
+  background: var(--burnnote-gradient);
+  color: var(--burnnote-white);
+  border: none;
+  font-weight: 600;
+  padding: 0 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  font-family: inherit;
+  min-width: 60px;
+}
+
+#burnnote-open-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 191, 162, 0.3);
+}
+
+/* ---------------------------------------------------
+Message Display
+--------------------------------------------------- */
+.burnnote-message-body {
+  background: var(--burnnote-light-gray);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  border-left: 4px solid var(--burnnote-teal);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.burnnote-message-body p {
+  font-size: 1.15rem;
+  color: var(--burnnote-text-dark);
+  font-weight: 400;
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.burnnote-message-text {
+  font-size: 1.3rem;
+  color: var(--burnnote-navy);
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.7;
+  margin: 1.5rem 0;
+}
+
+/* ---------------------------------------------------
+Link Display - Fixed Footer Alignment
+--------------------------------------------------- */
+.burnnote-newnote-link {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--burnnote-navy);
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+.burnnote-newnote-link a {
+  color: var(--burnnote-navy);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(79, 191, 162, 0.05);
+  border: 1px solid rgba(79, 191, 162, 0.1);
+}
+
+.burnnote-newnote-link a:hover {
+  color: var(--burnnote-teal);
+  background: rgba(79, 191, 162, 0.1);
+  border-color: rgba(79, 191, 162, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 191, 162, 0.15);
+}
+
+/* ---------------------------------------------------
+Error and Success Messages
+--------------------------------------------------- */
+.burnnote-error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 1.25rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  font-weight: 500;
+  border-left: 4px solid #dc2626;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.burnnote-success {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #16a34a;
+  padding: 1.25rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  font-weight: 500;
+  border-left: 4px solid #16a34a;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.1);
+  animation: fadeInUp 0.6s ease-out;
 }
 
 /* ---------------------------------------------------
 Mobile Responsiveness
 --------------------------------------------------- */
 @media screen and (max-width: 480px) {
+  body {
+    padding: 1rem;
+  }
+  
   .burnnote-hero {
     padding: 2rem 1rem;
   }
 
   .burnnote-container {
-    padding: 1.5rem;
-    margin: 0 1rem;
+    padding: 2rem 1.5rem;
+    margin: 0;
+    border-radius: 16px;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .burnnote-header h2 {
+    font-size: 1.75rem;
   }
 
   .burnnote-container textarea,
   .burnnote-password-field {
     width: 100%;
+    padding: 1rem;
   }
 
   .burnnote-container button[type="submit"],
   .burnnote-submit-btn,
-  #burnnote-copy-btn {
+  #burnnote-copy-btn,
+  #burnnote-open-btn {
     width: 100%;
     text-align: center;
   }
@@ -204,34 +528,15 @@ Mobile Responsiveness
     flex-direction: column;
     gap: 0.75rem;
   }
-}
-
-/* ---------------------------------------------------
-Link Display
---------------------------------------------------- */
-.burnnote-newnote-link {
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.burnnote-newnote-link a {
-  color: #ffffff;
-  text-decoration: underline;
-  font-weight: 500;
-}
-
-/* ---------------------------------------------------
-Message
---------------------------------------------------- */
-.burnnote-message-body {
-  margin: 1.5rem 0;
-}
-
-.burnnote-message-text {
-  font-size: 1.25rem;
-  color: #0B2948;
-  font-weight: 500;
-  text-align: center;
-  line-height: 1.6;
-  margin: 1rem 0;
+  
+  .burnnote-reveal-btn {
+    width: 100%;
+    min-width: auto;
+    padding: 1rem 1.5rem;
+  }
+  
+  .burnnote-newnote-link {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+  }
 }

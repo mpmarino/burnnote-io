@@ -7,9 +7,15 @@
 </head>
 <body>
     <div class="burnnote-container">
+      <div class="burnnote-header">
+        <div class="burnnote-icon" role="img" aria-label="Secure lock icon"></div>
         <h2>Incorrect Password</h2>
         <p class="burnnote-subtext">The password you entered is incorrect. Please try again.</p>
-        <a href="<?php echo esc_url(add_query_arg('burnnote_view', $token, site_url())); ?>" style="display:inline-block;margin-top:1rem;color:#4FBFA2;text-decoration:underline;">← Try again</a>
+      </div>
+      
+      <div class="burnnote-newnote-link">
+        <a href="<?php echo esc_url(add_query_arg('burnnote_view', $token, site_url())); ?>">← Try again</a>
+      </div>
     </div>
     <?php wp_footer(); ?>
 </body>

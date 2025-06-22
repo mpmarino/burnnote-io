@@ -10,13 +10,11 @@
     <div class="burnnote-header">
       <div class="burnnote-icon" role="img" aria-label="Secure lock icon"></div>
       <h2>Your Message</h2>
-      <p class="burnnote-subtext"><em>This note will now been burned.</em></p>
+      <p class="burnnote-subtext"><em>This note has been burned and can no longer be accessed.</em></p>
     </div>
 
     <div class="burnnote-message-body">
-	<p>
-		<?php echo nl2br(esc_html($message)); ?>
-	</p>
+      <p><?php echo nl2br(esc_html($message)); ?></p>
     </div>
 
     <div class="burnnote-newnote-link">
