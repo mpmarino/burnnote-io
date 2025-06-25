@@ -288,29 +288,6 @@ add_action('wp_enqueue_scripts', 'burnnote_enqueue_styles');
 function burnnote_enqueue_styles() {
     if (!is_admin()) {
         wp_enqueue_style('burnnote-style', plugins_url('burnnote-io.css', __FILE__), array(), '2.0.0');
-        
-        // Add inline CSS for shortcode pages
-        $post = get_post();
-        if ($post && has_shortcode($post->post_content, 'burnnote_form')) {
-            wp_add_inline_style('burnnote-style', '
-                .burnnote-hero {
-                    max-width: 1200px !important;
-                    width: 100% !important;
-                    margin: 0 auto !important;
-                }
-                .entry-content .burnnote-hero,
-                .wp-block-post-content .burnnote-hero {
-                    max-width: 1200px !important;
-                    width: 100% !important;
-                    margin: 0 auto !important;
-                }
-                .entry-content,
-                .wp-block-post-content {
-                    max-width: none !important;
-                    width: 100% !important;
-                }
-            ');
-        }
     }
 }
 

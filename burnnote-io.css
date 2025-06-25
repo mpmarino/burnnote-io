@@ -44,26 +44,6 @@ Hero Container (Main wrapper)
   position: relative !important;
 }
 
-/* Force all content inside hero to be centered */
-.burnnote-hero * {
-  text-align: center !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-/* Override any theme text alignment in hero */
-.burnnote-hero h1,
-.burnnote-hero h2,
-.burnnote-hero h3,
-.burnnote-hero h4,
-.burnnote-hero h5,
-.burnnote-hero h6,
-.burnnote-hero p,
-.burnnote-hero div,
-.burnnote-hero span {
-  text-align: center !important;
-}
-
 /* For WordPress theme integration, adjust hero when not full page */
 body:not(.burnnote-standalone) .burnnote-hero {
   min-height: auto !important;
@@ -92,37 +72,6 @@ Container Styles (Shared)
   text-align: center !important;
 }
 
-/* Force all content inside to be centered */
-.burnnote-container * {
-  text-align: center !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-/* Override any theme text alignment */
-.burnnote-container h1,
-.burnnote-container h2,
-.burnnote-container h3,
-.burnnote-container h4,
-.burnnote-container h5,
-.burnnote-container h6,
-.burnnote-container p,
-.burnnote-container div,
-.burnnote-container span {
-  text-align: center !important;
-}
-
-/* Force form elements to be centered */
-.burnnote-container form {
-  width: 100% !important;
-  max-width: 600px !important;
-  margin: 0 auto !important;
-  text-align: center !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-}
-
 /* Template pages (full HTML) should have different sizing */
 body > .burnnote-container {
   max-width: 800px !important;
@@ -138,28 +87,6 @@ body .wp-block-post-content .burnnote-container {
   width: 100% !important;
   margin: 0 auto !important;
   padding: 4rem 4rem !important;
-}
-
-/* Force parent containers to allow full width */
-body > div:has(.burnnote-container),
-body > main:has(.burnnote-container),
-body > article:has(.burnnote-container),
-body > section:has(.burnnote-container) {
-  max-width: none !important;
-  width: 100% !important;
-}
-
-/* Override any theme max-width on parent containers */
-body .container,
-body .wrapper,
-body .content,
-body .main,
-body .site-content,
-body .site-main,
-body .entry-content,
-body .wp-block-post-content {
-  max-width: none !important;
-  width: 100% !important;
 }
 
 .burnnote-container::before {
