@@ -288,6 +288,29 @@ add_action('wp_enqueue_scripts', 'burnnote_enqueue_styles');
 function burnnote_enqueue_styles() {
     if (!is_admin()) {
         wp_enqueue_style('burnnote-style', plugins_url('burnnote-io.css', __FILE__), array(), '2.0.0');
+        
+        // Add inline CSS for shortcode pages
+        $post = get_post();
+        if ($post && has_shortcode($post->post_content, 'burnnote_form')) {
+            wp_add_inline_style('burnnote-style', '
+                .burnnote-hero {
+                    max-width: 1200px !important;
+                    width: 100% !important;
+                    margin: 0 auto !important;
+                }
+                .entry-content .burnnote-hero,
+                .wp-block-post-content .burnnote-hero {
+                    max-width: 1200px !important;
+                    width: 100% !important;
+                    margin: 0 auto !important;
+                }
+                .entry-content,
+                .wp-block-post-content {
+                    max-width: none !important;
+                    width: 100% !important;
+                }
+            ');
+        }
     }
 }
 
@@ -319,8 +342,43 @@ function burnnote_preload_lock_icon() {
 
 add_filter('body_class', 'burnnote_add_body_class');
 function burnnote_add_body_class($classes) {
-    if (isset($_GET['burnnote_view']) || isset($_GET['burnnote_reveal']) || isset($_GET['burnnote_token'])) {
+    $post = get_post();
+    $has_shortcode = $post && has_shortcode($post->post_content, 'burnnote_form');
+    
+    if (isset($_GET['burnnote_view']) || isset($_GET['burnnote_reveal']) || isset($_GET['burnnote_token']) || $has_shortcode) {
         $classes[] = 'burnnote-standalone';
     }
     return $classes;
+}
+
+add_action('wp_footer', 'burnnote_force_full_width_js');
+function burnnote_force_full_width_js() {
+    // Check if we're on a BurnNote page or if the shortcode is present
+    $post = get_post();
+    $has_shortcode = $post && has_shortcode($post->post_content, 'burnnote_form');
+    
+    if (isset($_GET['burnnote_view']) || isset($_GET['burnnote_reveal']) || isset($_GET['burnnote_token']) || $has_shortcode) {
+        ?>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Force full width on BurnNote containers
+            const containers = document.querySelectorAll('.burnnote-container, .burnnote-hero');
+            containers.forEach(function(container) {
+                container.style.maxWidth = '1200px';
+                container.style.width = '100%';
+                container.style.margin = '0 auto';
+            });
+            
+            // Override parent container constraints
+            const parentContainers = document.querySelectorAll('.container, .wrapper, .content, .main, .site-content, .site-main, .entry-content, .wp-block-post-content');
+            parentContainers.forEach(function(parent) {
+                if (parent.querySelector('.burnnote-container') || parent.querySelector('.burnnote-hero')) {
+                    parent.style.maxWidth = 'none';
+                    parent.style.width = '100%';
+                }
+            });
+        });
+        </script>
+        <?php
+    }
 }

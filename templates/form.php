@@ -1,5 +1,3 @@
-<?php get_header(); ?>
-
 <div class="burnnote-hero">
   <div class="burnnote-container">
     <div class="burnnote-header">
@@ -71,5 +69,4 @@
           }
       });
   </script>
-
-<?php get_footer(); ?>
+</div>
