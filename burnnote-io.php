@@ -338,21 +338,12 @@ function burnnote_force_full_width_js() {
         ?>
         <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Force full width on BurnNote containers
+            // Ensure BurnNote containers have proper width
             const containers = document.querySelectorAll('.burnnote-container, .burnnote-hero');
             containers.forEach(function(container) {
                 container.style.maxWidth = '1200px';
                 container.style.width = '100%';
                 container.style.margin = '0 auto';
-            });
-            
-            // Override parent container constraints
-            const parentContainers = document.querySelectorAll('.container, .wrapper, .content, .main, .site-content, .site-main, .entry-content, .wp-block-post-content');
-            parentContainers.forEach(function(parent) {
-                if (parent.querySelector('.burnnote-container') || parent.querySelector('.burnnote-hero')) {
-                    parent.style.maxWidth = 'none';
-                    parent.style.width = '100%';
-                }
             });
         });
         </script>

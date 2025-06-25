@@ -34,20 +34,20 @@ body {
 Hero Container (Main wrapper)
 --------------------------------------------------- */
 .burnnote-hero {
-  background-color: var(--burnnote-light-gray) !important;
-  padding: 4rem 2rem !important;
-  min-height: 100vh !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  margin: 0 auto !important;
-  position: relative !important;
+  background-color: var(--burnnote-light-gray);
+  padding: 4rem 2rem;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  position: relative;
 }
 
 /* For WordPress theme integration, adjust hero when not full page */
 body:not(.burnnote-standalone) .burnnote-hero {
-  min-height: auto !important;
-  padding: 2rem 1rem !important;
+  min-height: auto;
+  padding: 2rem 1rem;
 }
 
 /* ---------------------------------------------------
@@ -56,37 +56,36 @@ Container Styles (Shared)
 .burnnote-container {
   font-family: 'IBM Plex Sans', sans-serif;
   
-  padding: 4rem 4rem !important;
-  border-radius: 20px !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 auto !important;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  position: relative !important;
-  backdrop-filter: blur(10px) !important;
-  animation: fadeInUp 0.6s ease-out !important;
-  overflow: hidden !important;
-  background-color: #4FBFA2 !important;
-  box-sizing: border-box !important;
-  text-align: center !important;
+  padding: 4rem 4rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 0.6s ease-out;
+  overflow: hidden;
+  background-color: #4FBFA2;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 /* Template pages (full HTML) should have different sizing */
 body > .burnnote-container {
-  max-width: 800px !important;
-  margin: 2rem auto !important;
-  width: 90% !important;
+  max-width: 800px;
+  margin: 2rem auto;
+  width: 90%;
 }
 
-/* Override any WordPress theme container constraints */
-body .burnnote-container,
-body .entry-content .burnnote-container,
-body .wp-block-post-content .burnnote-container {
-  max-width: 100% !important;
-  width: 100% !important;
-  margin: 0 auto !important;
-  padding: 4rem 4rem !important;
+/* Override WordPress theme container constraints */
+.entry-content .burnnote-container,
+.wp-block-post-content .burnnote-container {
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  padding: 4rem 4rem;
 }
 
 .burnnote-container::before {
