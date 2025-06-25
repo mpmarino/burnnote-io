@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>BurnNote | Your Message</title>
-	<?php wp_head(); ?>
-</head>
-<body>
+<div class="burnnote-hero">
   <div class="burnnote-container">
     <div class="burnnote-header">
       <div class="burnnote-icon" role="img" aria-label="Secure lock icon"></div>
@@ -21,6 +14,4 @@
       <a href="<?php echo esc_url(site_url()); ?>">← Make a new note</a>
     </div>
   </div>
-  <?php wp_footer(); ?>
-</body>
-</html>
+</div>

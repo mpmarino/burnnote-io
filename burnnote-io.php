@@ -140,13 +140,22 @@ function burnnote_view_note() {
         $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE token = %s", $token));
 
         if (!$row) {
-            include plugin_dir_path(__FILE__) . 'templates/invalid.php';
-            exit;
+            // Set up the content for invalid page
+            add_filter('the_content', function() {
+                ob_start();
+                include plugin_dir_path(__FILE__) . 'templates/invalid.php';
+                return ob_get_clean();
+            });
+            return;
         }
 
         if ($row->viewed) {
-            include plugin_dir_path(__FILE__) . 'templates/already-viewed.php';
-            exit;
+            add_filter('the_content', function() {
+                ob_start();
+                include plugin_dir_path(__FILE__) . 'templates/already-viewed.php';
+                return ob_get_clean();
+            });
+            return;
         }
 
         if (!empty($row->password)) {
@@ -154,14 +163,22 @@ function burnnote_view_note() {
             $session_key = 'burnnote_verified_' . $token;
             if (!isset($_SESSION[$session_key])) {
                 if (!isset($_POST['burnnote_password'])) {
-                    include plugin_dir_path(__FILE__) . 'templates/password-form.php';
-                    exit;
+                    add_filter('the_content', function() {
+                        ob_start();
+                        include plugin_dir_path(__FILE__) . 'templates/password-form.php';
+                        return ob_get_clean();
+                    });
+                    return;
                 }
 
                 $submitted_password = sanitize_text_field($_POST['burnnote_password']);
                 if (!password_verify($submitted_password, $row->password)) {
-                    include plugin_dir_path(__FILE__) . 'templates/incorrect-password.php';
-                    exit;
+                    add_filter('the_content', function() {
+                        ob_start();
+                        include plugin_dir_path(__FILE__) . 'templates/incorrect-password.php';
+                        return ob_get_clean();
+                    });
+                    return;
                 }
                 
                 // Mark as verified in session
@@ -179,8 +196,12 @@ function burnnote_view_note() {
 
         // Decrypt the message before displaying
         $message = esc_html(burnnote_decrypt_message($row->message));
-        include plugin_dir_path(__FILE__) . 'templates/message-view.php';
-        exit;
+        add_filter('the_content', function() use ($message) {
+            ob_start();
+            include plugin_dir_path(__FILE__) . 'templates/message-view.php';
+            return ob_get_clean();
+        });
+        return;
     }
     
     // Handle the initial view (show reveal prompt)
@@ -189,13 +210,21 @@ function burnnote_view_note() {
         $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE token = %s", $token));
 
         if (!$row) {
-            include plugin_dir_path(__FILE__) . 'templates/invalid.php';
-            exit;
+            add_filter('the_content', function() {
+                ob_start();
+                include plugin_dir_path(__FILE__) . 'templates/invalid.php';
+                return ob_get_clean();
+            });
+            return;
         }
 
         if ($row->viewed) {
-            include plugin_dir_path(__FILE__) . 'templates/already-viewed.php';
-            exit;
+            add_filter('the_content', function() {
+                ob_start();
+                include plugin_dir_path(__FILE__) . 'templates/already-viewed.php';
+                return ob_get_clean();
+            });
+            return;
         }
 
         if (!empty($row->password)) {
@@ -203,14 +232,22 @@ function burnnote_view_note() {
             $session_key = 'burnnote_verified_' . $token;
             if (!isset($_SESSION[$session_key])) {
                 if (!isset($_POST['burnnote_password'])) {
-                    include plugin_dir_path(__FILE__) . 'templates/password-form.php';
-                    exit;
+                    add_filter('the_content', function() {
+                        ob_start();
+                        include plugin_dir_path(__FILE__) . 'templates/password-form.php';
+                        return ob_get_clean();
+                    });
+                    return;
                 }
 
                 $submitted_password = sanitize_text_field($_POST['burnnote_password']);
                 if (!password_verify($submitted_password, $row->password)) {
-                    include plugin_dir_path(__FILE__) . 'templates/incorrect-password.php';
-                    exit;
+                    add_filter('the_content', function() {
+                        ob_start();
+                        include plugin_dir_path(__FILE__) . 'templates/incorrect-password.php';
+                        return ob_get_clean();
+                    });
+                    return;
                 }
                 
                 // Mark as verified in session
@@ -219,8 +256,12 @@ function burnnote_view_note() {
         }
         
         // Show the reveal prompt
-        include plugin_dir_path(__FILE__) . 'templates/reveal-prompt.php';
-        exit;
+        add_filter('the_content', function() {
+            ob_start();
+            include plugin_dir_path(__FILE__) . 'templates/reveal-prompt.php';
+            return ob_get_clean();
+        });
+        return;
     }
 }
 
@@ -274,4 +315,12 @@ function burnnote_preload_lock_icon() {
             echo '<link rel="preload" as="image" href="' . esc_url($img_url) . '" type="image/png" fetchpriority="high">' . "\n";
         }
     }
+}
+
+add_filter('body_class', 'burnnote_add_body_class');
+function burnnote_add_body_class($classes) {
+    if (isset($_GET['burnnote_view']) || isset($_GET['burnnote_reveal']) || isset($_GET['burnnote_token'])) {
+        $classes[] = 'burnnote-standalone';
+    }
+    return $classes;
 }

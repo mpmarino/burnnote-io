@@ -28,9 +28,6 @@ body {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   font-family: 'IBM Plex Sans', sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /* ---------------------------------------------------
@@ -43,6 +40,12 @@ Hero Section Background
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* For WordPress theme integration, adjust hero when not full page */
+body:not(.burnnote-standalone) .burnnote-hero {
+  min-height: auto;
+  padding: 2rem 1rem;
 }
 
 /* ---------------------------------------------------
@@ -63,6 +66,13 @@ Container Styles (Shared)
   animation: fadeInUp 0.6s ease-out;
   overflow: hidden;
   background-color: #4FBFA2;
+}
+
+/* Template pages (full HTML) should have different sizing */
+body > .burnnote-container {
+  width: 100% !important;
+  max-width: 600px !important;
+  margin: 2rem auto;
 }
 
 /* Override any percentage-based constraints */
@@ -193,6 +203,9 @@ Submit Button (both pages)
   font-family: inherit;
   position: relative;
   overflow: hidden;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .burnnote-submit-btn::before,
@@ -228,21 +241,25 @@ Reveal Button
 }
 
 .burnnote-reveal-btn {
-  background: var(--burnnote-gradient);
+  background: var(--burnnote-navy-gradient);
   color: var(--burnnote-white);
-  font-weight: 600;
+  font-weight: 700;
   border: none;
-  padding: 1.25rem 2.5rem;
-  font-size: 1.2rem;
+  padding: 1.5rem 3rem;
+  font-size: 1.3rem;
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
-  letter-spacing: 0.3px;
-  box-shadow: 0 8px 24px rgba(79, 191, 162, 0.3);
+  letter-spacing: 0.5px;
+  box-shadow: 0 8px 24px rgba(11, 41, 72, 0.3);
   font-family: inherit;
-  min-width: 220px;
+  min-width: 280px;
   position: relative;
   overflow: hidden;
+  text-transform: uppercase;
+  animation: buttonPulse 2s ease-in-out infinite;
+  display: block;
+  margin: 0 auto;
 }
 
 .burnnote-reveal-btn::before {
@@ -261,8 +278,9 @@ Reveal Button
 }
 
 .burnnote-reveal-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(79, 191, 162, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(11, 41, 72, 0.4);
+  background: linear-gradient(135deg, #1B3C63 0%, #0B2948 100%);
 }
 
 .burnnote-reveal-btn:disabled {
@@ -307,6 +325,15 @@ Reveal Button
   }
 }
 
+@keyframes buttonPulse {
+  0%, 100% {
+    box-shadow: 0 8px 24px rgba(11, 41, 72, 0.3);
+  }
+  50% {
+    box-shadow: 0 8px 24px rgba(11, 41, 72, 0.5), 0 0 20px rgba(11, 41, 72, 0.3);
+  }
+}
+
 /* ---------------------------------------------------
 Copy Link Styles
 --------------------------------------------------- */
@@ -332,6 +359,7 @@ Copy Link Styles
   display: flex;
   gap: 0.75rem;
   align-items: stretch;
+  justify-content: center;
 }
 
 #burnnote-generated-link {
@@ -450,11 +478,37 @@ Link Display - Fixed Footer Alignment
 }
 
 .burnnote-newnote-link a:hover {
-  color: var(--burnnote-teal);
-  background: rgba(79, 191, 162, 0.1);
-  border-color: rgba(79, 191, 162, 0.2);
+  color: var(--burnnote-white);
+  background: rgba(11, 41, 72, 0.9);
+  border-color: rgba(11, 41, 72, 0.3);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(79, 191, 162, 0.15);
+  box-shadow: 0 4px 12px rgba(11, 41, 72, 0.3);
+}
+
+/* ---------------------------------------------------
+Warning Box
+--------------------------------------------------- */
+.burnnote-warning-box {
+  background-color: #fef3c7;
+  border: 1px solid #f59e0b;
+  color: #92400e;
+  padding: 1.25rem;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  font-weight: 500;
+  border-left: 4px solid #f59e0b;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+  animation: fadeInUp 0.6s ease-out 0.4s both;
+}
+
+.burnnote-warning-box p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.burnnote-warning-box strong {
+  font-weight: 600;
 }
 
 /* ---------------------------------------------------
@@ -506,6 +560,13 @@ Mobile Responsiveness
     width: 100% !important;
   }
 
+  /* Template pages on mobile */
+  body > .burnnote-container {
+    margin: 1rem;
+    width: calc(100% - 2rem) !important;
+    max-width: calc(100% - 2rem) !important;
+  }
+
   .burnnote-header h2 {
     font-size: 1.75rem;
   }
@@ -522,6 +583,8 @@ Mobile Responsiveness
   #burnnote-open-btn {
     width: 100%;
     text-align: center;
+    display: block;
+    margin: 0 auto;
   }
 
   .burnnote-link-row {
@@ -532,11 +595,21 @@ Mobile Responsiveness
   .burnnote-reveal-btn {
     width: 100%;
     min-width: auto;
-    padding: 1rem 1.5rem;
+    padding: 1.25rem 2rem;
+    font-size: 1.1rem;
   }
   
   .burnnote-newnote-link {
     margin-top: 2rem;
     padding-top: 1.5rem;
   }
+}
+
+#burnnote-password-form {
+  text-align: center;
+}
+
+#burnnote-password-form .burnnote-submit-btn {
+  display: block;
+  margin: 0 auto;
 }

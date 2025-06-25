@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>BurnNote | Create a Note</title>
-    <?php wp_head(); ?>
-</head>
-<body>
+<?php get_header(); ?>
+
+<div class="burnnote-hero">
   <div class="burnnote-container">
     <div class="burnnote-header">
       <div class="burnnote-icon" role="img" aria-label="Secure lock icon"></div>
@@ -55,26 +50,26 @@
         </button>
       </form>
     </div>
+  </div>
 
-    <script data-cfasync="false">
-        let formSubmittedByUser = false;
+  <script data-cfasync="false">
+      let formSubmittedByUser = false;
 
-        function onTurnstileSuccess(token) {
-            if (!formSubmittedByUser) return;
-            document.getElementById('cf-turnstile-response').value = token;
-            document.getElementById('burnnote-form').submit();
-        }
+      function onTurnstileSuccess(token) {
+          if (!formSubmittedByUser) return;
+          document.getElementById('cf-turnstile-response').value = token;
+          document.getElementById('burnnote-form').submit();
+      }
 
-        document.getElementById('burnnote-form').addEventListener('submit', function (e) {
-            const token = document.getElementById('cf-turnstile-response').value;
+      document.getElementById('burnnote-form').addEventListener('submit', function (e) {
+          const token = document.getElementById('cf-turnstile-response').value;
 
-            if (!token) {
-                e.preventDefault();
-                formSubmittedByUser = true;
-                turnstile.execute(document.getElementById('cf-turnstile'));
-            }
-        });
-    </script>
-    <?php wp_footer(); ?>
-</body>
-</html>
+          if (!token) {
+              e.preventDefault();
+              formSubmittedByUser = true;
+              turnstile.execute(document.getElementById('cf-turnstile'));
+          }
+      });
+  </script>
+
+<?php get_footer(); ?>
