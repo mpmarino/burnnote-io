@@ -327,26 +327,3 @@ function burnnote_add_body_class($classes) {
     }
     return $classes;
 }
-
-add_action('wp_footer', 'burnnote_force_full_width_js');
-function burnnote_force_full_width_js() {
-    // Check if we're on a BurnNote page or if the shortcode is present
-    $post = get_post();
-    $has_shortcode = $post && has_shortcode($post->post_content, 'burnnote_form');
-    
-    if (isset($_GET['burnnote_view']) || isset($_GET['burnnote_reveal']) || isset($_GET['burnnote_token']) || $has_shortcode) {
-        ?>
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Ensure BurnNote containers have proper width
-            const containers = document.querySelectorAll('.burnnote-container, .burnnote-hero');
-            containers.forEach(function(container) {
-                container.style.maxWidth = '1200px';
-                container.style.width = '100%';
-                container.style.margin = '0 auto';
-            });
-        });
-        </script>
-        <?php
-    }
-}
